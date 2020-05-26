@@ -1,0 +1,45 @@
+version: "3.3"
+
+services:
+  php73_laravel:
+    container_name: php73_laravel
+    build: ../php73_laravel/
+    restart: unless-stopped
+    volumes:
+      - "${STORAGE_PATH}:/var/project"
+    depends_on:
+      - mysql57
+    networks:
+      - dev
+
+  mysql57:
+    container_name: mysql57
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql57-data:/var/lib/mysql
+    networks:
+      - dev
+
+  nginx:
+    container_name: nginx
+    build: ../nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - "${STORAGE_PATH}:/var/project"
+      - "${LOG_PATH}:/var/log/nginx"
+      - ../nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  mysql57-data:
