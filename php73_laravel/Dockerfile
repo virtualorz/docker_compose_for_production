@@ -58,6 +58,10 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
+RUN npm i -g create-nuxt-app
+ENV HOST 0.0.0.0
+WORKDIR /var/project/laravel
+
 
 #supervisor
 RUN chmod 777 /run && chmod 777 /var/log && touch /var/run/supervisor.sock && chmod 777 /var/run/supervisor.sock && touch /var/log/supervisor/worker.log && chmod 777 /var/log/supervisor/worker.log
